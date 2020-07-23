@@ -1,5 +1,9 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:kit_demo/pages/main_page/page.dart';
+import 'package:kit_demo/pages/splash_page/page.dart';
+
+import 'config/router_conf.dart';
 
 /// create by crius on 2020/7/17
 /// email:criusker@163.com
@@ -9,7 +13,8 @@ class AppRoute{
     if (_global == null) {
       _global = PageRoutes(
           pages:<String, Page<Object, dynamic>>{
-
+            Routers.splash: SplashPage(),
+            Routers.main: MainPage()
           },
 
           visitor: (String path, Page<Object, dynamic>page){
@@ -46,10 +51,22 @@ class AppRoute{
 }
 
 Widget createApp(){
+  final AbstractRoutes routes = AppRoute.global;
   return MaterialApp(
     title: "KitDemo",
     debugShowCheckedModeBanner: false,
-    home: Scaffold(body: Center(child: Text("KitDemo"))),
+    home: routes.buildPage(Routers.splash, null),
+    onGenerateRoute: (RouteSettings settings){
+      return MaterialPageRoute<Object>(builder: (BuildContext context) {
+        return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              // 触摸收起键盘
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: routes.buildPage(settings.name, settings.arguments));
+      });
+    },
   );
 }
 
