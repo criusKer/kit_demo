@@ -12,7 +12,7 @@ Effect<SplashState> buildEffect() {
 }
 
 void _init(Action action, Context<SplashState> ctx) async {
-  await Future.delayed(const Duration(milliseconds: 2000), () {
+  await Future.delayed(const Duration(milliseconds: 1000), () {
     Navigator.of(ctx.context).pushReplacementNamed(Routers.main);
   });
 }
